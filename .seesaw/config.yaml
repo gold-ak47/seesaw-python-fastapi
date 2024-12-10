@@ -1,0 +1,19 @@
+apiVersion: seesaw.config.k8s.io/v1beta1
+
+kind: Service
+
+image: .
+
+deployment:
+  kubectl:
+    kustomize: true
+    manifests:
+    - ./k8s/base
+
+commands:
+  testrunner: python -m pytest /app/tests -v
+  server: python -m uvicorn ${PROJECT_NAME}.app:app --host 0.0.0.0 --port ${PROJECT_PORT} --reload --reload-dir /app/src
+
+paths:
+  - src
+  - tests
